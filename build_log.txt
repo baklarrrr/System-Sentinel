@@ -1,0 +1,72 @@
+Build started at Mon 02/17/2025 12:06:20.34 
+349 INFO: PyInstaller: 6.12.0, contrib hooks: 2025.1
+350 INFO: Python: 3.11.9
+366 INFO: Platform: Windows-10-10.0.26120-SP0
+366 INFO: Python environment: C:\Users\Bakar\AppData\Local\Programs\Python\Python311
+366 INFO: wrote c:\Users\Bakar\Documents\Powershell Scripts\System Sentinal\SystemSentinelGUI.spec
+369 INFO: Removing temporary files and cleaning cache in C:\Users\Bakar\AppData\Local\pyinstaller
+371 INFO: Module search paths (PYTHONPATH):
+['C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pyinstaller.exe',
+ 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip',
+ 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\DLLs',
+ 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib',
+ 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311',
+ 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages',
+ 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\win32',
+ 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\win32\\lib',
+ 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\Pythonwin',
+ 'c:\\Users\\Bakar\\Documents\\Powershell Scripts\\System Sentinal']
+903 INFO: Appending 'datas' from .spec
+904 INFO: checking Analysis
+904 INFO: Building Analysis because Analysis-00.toc is non existent
+904 INFO: Running Analysis Analysis-00.toc
+904 INFO: Target bytecode optimization level: 0
+904 INFO: Initializing module dependency graph...
+904 INFO: Initializing module graph hook caches...
+918 INFO: Analyzing modules for base_library.zip ...
+2103 INFO: Processing standard module hook 'hook-heapq.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+2307 INFO: Processing standard module hook 'hook-encodings.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+3742 INFO: Processing standard module hook 'hook-pickle.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+4927 INFO: Caching module dependency graph...
+4963 INFO: Looking for Python shared library...
+4970 INFO: Using Python shared library: C:\Users\Bakar\AppData\Local\Programs\Python\Python311\python311.dll
+4970 INFO: Analyzing c:\Users\Bakar\Documents\Powershell Scripts\System Sentinal\SystemSentinelGUI.py
+4975 INFO: Processing standard module hook 'hook-PyQt6.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+5072 INFO: Processing standard module hook 'hook-PyQt6.QtWidgets.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+5182 INFO: Processing standard module hook 'hook-PyQt6.QtGui.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+5430 INFO: Processing standard module hook 'hook-PyQt6.QtCore.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+5574 INFO: Processing module hooks (post-graph stage)...
+5610 INFO: Performing binary vs. data reclassification (113 entries)
+5634 INFO: Looking for ctypes DLLs
+5643 INFO: Analyzing run-time hooks ...
+5644 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+5646 INFO: Including run-time hook 'pyi_rth_pyqt6.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+5647 INFO: Processing pre-find-module-path hook 'hook-_pyi_rth_utils.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_find_module_path'
+5648 INFO: Processing standard module hook 'hook-_pyi_rth_utils.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+5651 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from 'C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+5656 INFO: Creating base_library.zip...
+5715 INFO: Looking for dynamic libraries
+5823 INFO: Extra DLL search directories (AddDllDirectory): ['C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyQt6\\Qt6\\bin']
+5824 INFO: Extra DLL search directories (PATH): ['C:\\Users\\Bakar\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyQt6\\Qt6\\bin']
+6544 INFO: Warnings written to c:\Users\Bakar\Documents\Powershell Scripts\System Sentinal\build\SystemSentinelGUI\warn-SystemSentinelGUI.txt
+6559 INFO: Graph cross-reference written to c:\Users\Bakar\Documents\Powershell Scripts\System Sentinal\build\SystemSentinelGUI\xref-SystemSentinelGUI.html
+6575 INFO: checking PYZ
+6575 INFO: Building PYZ because PYZ-00.toc is non existent
+6575 INFO: Building PYZ (ZlibArchive) c:\Users\Bakar\Documents\Powershell Scripts\System Sentinal\build\SystemSentinelGUI\PYZ-00.pyz
+6840 INFO: Building PYZ (ZlibArchive) c:\Users\Bakar\Documents\Powershell Scripts\System Sentinal\build\SystemSentinelGUI\PYZ-00.pyz completed successfully.
+6852 INFO: checking PKG
+6853 INFO: Building PKG because PKG-00.toc is non existent
+6853 INFO: Building PKG (CArchive) SystemSentinelGUI.pkg
+14989 INFO: Building PKG (CArchive) SystemSentinelGUI.pkg completed successfully.
+14993 INFO: Bootloader C:\Users\Bakar\AppData\Local\Programs\Python\Python311\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+14994 INFO: checking EXE
+14994 INFO: Building EXE because EXE-00.toc is non existent
+14994 INFO: Building EXE from EXE-00.toc
+14994 INFO: Copying bootloader EXE to c:\Users\Bakar\Documents\Powershell Scripts\System Sentinal\dist\SystemSentinelGUI.exe
+15032 INFO: Copying icon to EXE
+15069 INFO: Copying 0 resources to EXE
+15069 INFO: Embedding manifest in EXE
+15106 INFO: Appending PKG archive to EXE
+15139 INFO: Fixing EXE headers
+15372 INFO: Building EXE from EXE-00.toc completed successfully.
+15377 INFO: Build complete! The results are available in: c:\Users\Bakar\Documents\Powershell Scripts\System Sentinal\dist

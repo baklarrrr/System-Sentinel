@@ -1,0 +1,9 @@
+﻿----- SYSTEM SPECIFICATIONS -----
+Computer Model: To Be Filled By O.E.M.
+Manufacturer: To Be Filled By O.E.M.
+Total Physical Memory (GB): 127.88
+Operating System: Microsoft Windows 11 Pro 10.0.26120
+System Type: x64-based PC
+Processor: AMD Ryzen Threadripper 3970X 32-Core Processor 
+Video Adapter: NVIDIA GeForce RTX 3090
+Last Boot Time: 02/17/2025 04:15:15
