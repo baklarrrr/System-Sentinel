@@ -67,6 +67,8 @@ MIT License © 2025 Bakar
 
 ## 👨‍💻 Creator
 Crafted with ❤️ by [Bakar](https://github.com/baklarrrr)
+A passionate hobbyist developer who believes in creating useful tools for everyone. 
+Built this project to combine my interests in system optimization and coding!
 
 ## 📝 Version History
 - v1.0.0 - First stable release 🎉
