@@ -1,0 +1,8 @@
+# Build artifacts
+build/SystemSentinelGUI/*
+*.toc
+*.pkg
+*.pyc
+.~lock*
+build_scan_log.txt
+tatus
