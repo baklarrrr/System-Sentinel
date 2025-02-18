@@ -16,10 +16,8 @@ echo. >> "%LOGFILE%"
 :: ┌─────────────────────────────────────────────────────┐
 :: │   2) DEFINE REQUIRED FILES                         │
 :: └─────────────────────────────────────────────────────┘
-:: Adjust or add more files as needed:
 set "REQUIRED_FILES=SystemSentinel.ps1 SystemSentinelModule.psm1 SystemSentinelConfig.json SystemSentinel.ico"
 
-:: Flag to indicate if any file is missing
 set "MISSING=0"
 
 :: ┌─────────────────────────────────────────────────────┐
@@ -40,6 +38,7 @@ for %%F in (%REQUIRED_FILES%) do (
         echo [MISSING] %%F >> "%LOGFILE%"
         set "MISSING=1"
     )
+    dir /b >> "%LOGFILE%"
     echo. >> "%LOGFILE%"
 )
 
@@ -55,30 +54,27 @@ if !MISSING! == 1 (
 echo [*] All required files found. See "%LOGFILE%" for details.
 
 :: ┌─────────────────────────────────────────────────────┐
-:: │   4) OPTIONAL: RUN PYINSTALLER BUILD               │
+:: │   4) RUN PYINSTALLER BUILD                         │
 :: └─────────────────────────────────────────────────────┘
-:: NOTE: It's recommended to NOT run PyInstaller as admin
-:: to avoid future version blocks. If you truly need admin 
-:: to handle folder permissions, do so BEFORE calling pyinstaller.
-
 echo [*] Running PyInstaller build...
-:: Append build output to the same log
 pyinstaller --noconfirm --clean --onefile ^
+  --icon "SystemSentinel.ico" ^
   --add-data "SystemSentinel.ps1;." ^
   --add-data "SystemSentinelModule.psm1;." ^
   --add-data "SystemSentinelConfig.json;." ^
   --add-data "SystemSentinel.ico;." ^
-  --distpath dist ^
+  --distpath "C:\Users\Bakar\Documents\Powershell Scripts\System Sentinal" ^
   --hidden-import=os ^
   --hidden-import=sys ^
-  SystemSentinelGUI.py >> "%LOGFILE%" 2>&1
+  SystemSentinelGUI.py
+
 if errorlevel 1 (
     echo [!] PyInstaller build failed. Check "%LOGFILE%" for details.
     pause
     exit /b 1
 )
 
-echo [*] Build succeeded! Final EXE in "%cd%\dist".
+echo [*] Build succeeded! Final EXE in "C:\Users\Bakar\Documents\Powershell Scripts\System Sentinal".
 echo [*] For details, see "%LOGFILE%".
 pause
 cmd /k
