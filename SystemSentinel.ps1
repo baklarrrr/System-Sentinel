@@ -1,6 +1,9 @@
 # SystemSentinel.ps1
 
-# ADD THIS LINE AT THE VERY TOP, RIGHT AFTER THE INITIAL COMMENTS:
+param(
+    [switch]$WaitOnExit # Use -WaitOnExit to pause before script exits
+)
+
 Start-Sleep -Seconds 5
 
 # -- Add this at the top --
@@ -95,5 +98,6 @@ else {
 Append-PerformanceHistory
 Log-SystemSpecs
 
-# Wait for user input before exiting
-Read-Host "Press Enter to exit the System Sentinel script"
+if ($WaitOnExit) {
+    Read-Host "Press Enter to exit the System Sentinel script"
+}
