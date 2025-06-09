@@ -1,7 +1,17 @@
 import os
 import sys
 import logging
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit, QProgressBar, QPushButton, QMessageBox, QApplication
+from PyQt6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QLabel,
+    QTextEdit,
+    QProgressBar,
+    QPushButton,
+    QMessageBox,
+    QApplication,
+    QCheckBox,
+)
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import QProcess
 import subprocess
@@ -53,6 +63,27 @@ class MainWindow(QWidget):
         self.reportButton.setStyleSheet("padding: 10px; font-size: 16px;")
         self.reportButton.clicked.connect(self.show_report)
         layout.addWidget(self.reportButton)
+
+        self.statusLabel = QLabel("Module Status: Pending")
+        self.statusLabel.setStyleSheet("font-size: 16px; color: gray;")
+        layout.addWidget(self.statusLabel)
+
+        self.moduleStatusLayout = QVBoxLayout()
+        self.moduleStatusLabel = QLabel("Module Progress:")
+        self.moduleStatusLayout.addWidget(self.moduleStatusLabel)
+
+        self.modules = {
+            "Module A": QCheckBox("Module A"),
+            "Module B": QCheckBox("Module B"),
+            "Module C": QCheckBox("Module C"),
+        }
+
+        for checkbox in self.modules.values():
+            checkbox.setEnabled(False)
+            checkbox.setStyleSheet("font-size: 16px;")
+            self.moduleStatusLayout.addWidget(checkbox)
+
+        layout.addLayout(self.moduleStatusLayout)
 
         self.setLayout(layout)
 
@@ -114,44 +145,21 @@ class MainWindow(QWidget):
         else:
             QMessageBox.information(self, "Report Not Found", f"No generated log found at:\n{log_path}")
 
+    def closeEvent(self, event):
+        if self.process.state() != QProcess.NotRunning:
+            self.process.kill()
+            self.process.waitForFinished(1000)
+        event.accept()
+
 if __name__ == '__main__':
     try:
         app = QApplication(sys.argv)
         window = MainWindow()
         window.show()
         exit_code = app.exec()
-    except Exception as exc:
+    except Exception:
         import traceback
         print("An exception occurred during startup:")
         traceback.print_exc()
         exit_code = 1
     sys.exit(exit_code)
-def closeEvent(self, event):
-    if self.process.state() != QProcess.NotRunning:
-        self.process.kill()
-        self.process.waitForFinished(1000)
-    event.accept()
-
-self.statusLabel = QLabel("Module Status: Pending")
-self.statusLabel.setStyleSheet("font-size: 16px; color: gray;")
-layout.addWidget(self.statusLabel)
-
-# In the MainWindow __init__ method, after you've created self.progressBar, add:
-self.moduleStatusLayout = QVBoxLayout()
-self.moduleStatusLabel = QLabel("Module Progress:")
-self.moduleStatusLayout.addWidget(self.moduleStatusLabel)
-
-# Example modules you want to track; update as needed
-self.modules = {
-    "Module A": QCheckBox("Module A"),
-    "Module B": QCheckBox("Module B"),
-    "Module C": QCheckBox("Module C")
-}
-
-# Disable user interaction on these checkboxes so they act only as status indicators.
-for checkbox in self.modules.values():
-    checkbox.setEnabled(False)
-    checkbox.setStyleSheet("font-size: 16px;")
-    self.moduleStatusLayout.addWidget(checkbox)
-
-layout.addLayout(self.moduleStatusLayout)
