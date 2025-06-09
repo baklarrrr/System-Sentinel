@@ -12,6 +12,7 @@ A powerful desktop application that combines the best of Python and PowerShell t
 - 🎨 Modern, user-friendly GUI
 - 📝 Detailed system health reports
 - ⚡ Lightweight and efficient
+- 🧹 Optional cleanup of Unreal Engine and Blender caches
 
 ## 🛠️ Components
 SystemSentinel/
@@ -51,7 +52,9 @@ Customize via SystemSentinelConfig.json:
 {
   "LogFileName": "build_scan_log.txt",
   "MaxLogFileSizeMB": 10,
-  "MaxArchivedLogs": 5
+  "MaxArchivedLogs": 5,
+  "CleanUnrealCache": true,
+  "CleanBlenderCache": true
 }
 
 ## 📈 Performance Impact

@@ -502,10 +502,64 @@ function Optimize-SystemPerformance {
             }
         }
         Run-CmdCommand "ipconfig /flushdns"
+
+        if ($config.CleanUnrealCache) { Clear-UnrealCache }
+        if ($config.CleanBlenderCache) { Clear-BlenderCache }
+
         Write-Log "System performance optimization completed." -Level Info
     }
     catch {
         Write-Log "General error in performance optimization: $($_.Exception.Message)" -Level Error
+    }
+}
+
+# --- Application Cache Cleanup Functions ---
+function Clear-UnrealCache {
+    Write-Log "Purging Unreal Engine derived data cache..." -Level Info
+    try {
+        $ueRoot = Join-Path $env:LOCALAPPDATA 'UnrealEngine'
+        if (Test-Path $ueRoot) {
+            $paths = @()
+            $common = Join-Path $ueRoot 'Common\DerivedDataCache'
+            if (Test-Path $common) { $paths += $common }
+            Get-ChildItem -Path $ueRoot -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+                $p = Join-Path $_.FullName 'DerivedDataCache'
+                if (Test-Path $p) { $paths += $p }
+            }
+            foreach ($p in $paths) {
+                Remove-Item -Path $p -Recurse -Force -ErrorAction Stop
+                Write-Log "Deleted $p" -Level Debug
+            }
+        }
+        else {
+            Write-Log "Unreal Engine directory not found at $ueRoot" -Level Warning
+        }
+    }
+    catch {
+        Write-Log "Error clearing Unreal Engine cache: $($_.Exception.Message)" -Level Error
+    }
+}
+
+function Clear-BlenderCache {
+    Write-Log "Purging Blender cache..." -Level Info
+    try {
+        $blenderRoot = Join-Path $env:APPDATA 'Blender Foundation\Blender'
+        if (Test-Path $blenderRoot) {
+            $versions = Get-ChildItem -Path $blenderRoot -Directory -ErrorAction SilentlyContinue
+            foreach ($ver in $versions) {
+                $cachePath = Join-Path $ver.FullName 'cache'
+                if (Test-Path $cachePath) {
+                    Remove-Item -Path $cachePath -Recurse -Force -ErrorAction Stop
+                    Write-Log "Deleted $cachePath" -Level Debug
+                }
+            }
+        }
+        else {
+            Write-Log "Blender directory not found at $blenderRoot" -Level Warning
+        }
+    }
+    catch {
+        Write-Log "Error clearing Blender cache: $($_.Exception.Message)" -Level Error
     }
 }
 
@@ -737,4 +791,5 @@ Export-ModuleMember -Function Invoke-WithRetry, Get-Timestamp, Roll-LogFile, Wri
     Analyze-PerformanceTrends, Self-Update, Run-RemoteMaintenance, Send-Notification, Send-SlackNotification, `
     Get-RestartRecommendation, Append-PerformanceHistory, Log-SystemSpecs, Optimize-SystemPerformance, `
     Monitor-SystemResources, Set-HighPerformancePowerPlan, Monitor-GPUUsage, Launch-TelemetryDashboard, `
-    Detect-Anomalies, Optimize-Workload, Check-DriverFirmwareUpdates, Optimize-Thermals, Analyze-Logs, Set-FileAssociation
+    Detect-Anomalies, Optimize-Workload, Check-DriverFirmwareUpdates, Optimize-Thermals, Analyze-Logs, Set-FileAssociation, `
+    Clear-UnrealCache, Clear-BlenderCache
