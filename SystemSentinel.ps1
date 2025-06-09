@@ -10,24 +10,21 @@ else {
     $global:RootPath = $PSScriptRoot
 }
 
-  # Get the correct path regardless of PyInstaller context
-  $scriptPath = $PSScriptRoot
-  if (-not $scriptPath) {
-      $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
-  }
+# Get the correct path regardless of PyInstaller context
+$scriptPath = $PSScriptRoot
+if (-not $scriptPath) {
+    $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
+}
 
-  # Use Join-Path for reliable path construction
-  $modulePath = Join-Path -Path $scriptPath -ChildPath "SystemSentinelModule.psm1"
+# Use Join-Path for reliable path construction
+$modulePath = Join-Path -Path $scriptPath -ChildPath "SystemSentinelModule.psm1"
 
-  # Add verbose logging for troubleshooting
-  Write-Host "Loading from: $modulePath"
-
-  # Import module with error handling
-  if (Test-Path $modulePath) {
-      Import-Module $modulePath -Force -Verbose
-  } else {
-      throw "Module not found at: $modulePath"
-  }
+# Import module with error handling
+if (Test-Path $modulePath) {
+    Import-Module $modulePath -Force -Verbose
+} else {
+    throw "Module not found at: $modulePath"
+}
 # Ensure $PSScriptRoot is defined (for older PowerShell versions)
 if (-not $PSScriptRoot) {
     # Fallback for PS < 3.0
