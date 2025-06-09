@@ -1,9 +1,5 @@
 # SystemSentinel.ps1
 
-# ADD THIS LINE AT THE VERY TOP, RIGHT AFTER THE INITIAL COMMENTS:
-Start-Sleep -Seconds 5
-
-# -- Add this at the top --
 # Detect PyInstaller bundle environment
 if ($env:_MEIPASS) {
     $global:BundleMode = $true
@@ -51,19 +47,6 @@ else {
 $global:LogFile           = Join-Path $PSScriptRoot $config.LogFileName
 $global:MaxLogFileSizeMB  = $config.MaxLogFileSizeMB
 $global:MaxArchivedLogs   = $config.MaxArchivedLogs
-    # Determine the folder where this script is located.
-    $currentDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-
-    # Form the full path of the module file.
-    $moduleFile = Join-Path $currentDir 'SystemSentinelModule.psm1'
-
-    # Check if the module file exists.
-    if (-not (Test-Path $moduleFile)) {
-        throw "Module file not found: $moduleFile"
-    }
-
-    # Import the module.
-    Import-Module -Name $moduleFile -Force -Verbose
 # Call functions that are defined in SystemSentinelModule.psm1
 Set-FileAssociation
 

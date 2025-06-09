@@ -56,6 +56,9 @@ Customize via SystemSentinelConfig.json:
   "CacheSizeLimitGB": 5
 }
 
+- `GPULoadThresholdPercent` sets the GPU usage warning threshold.
+- `CacheSizeLimitGB` defines the maximum allowed size for Unreal and Blender caches.
+
 ## 📈 Performance Impact
 - CPU: <2% average usage
 - Memory: ~50MB RAM
