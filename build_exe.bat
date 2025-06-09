@@ -16,7 +16,7 @@ echo. >> "%LOGFILE%"
 :: ┌─────────────────────────────────────────────────────┐
 :: │   2) DEFINE REQUIRED FILES                         │
 :: └─────────────────────────────────────────────────────┘
-set "REQUIRED_FILES=SystemSentinel.ps1 SystemSentinelModule.psm1 SystemSentinelConfig.json SystemSentinel.ico"
+set "REQUIRED_FILES=SystemSentinel.ps1 SystemSentinelModule.psm1 SystemSentinelConfig.json SystemSentinel.ico report_generator.py"
 
 set "MISSING=0"
 
@@ -63,6 +63,7 @@ pyinstaller --noconfirm --clean --onefile ^
   --add-data "SystemSentinelModule.psm1;." ^
   --add-data "SystemSentinelConfig.json;." ^
   --add-data "SystemSentinel.ico;." ^
+  --add-data "report_generator.py;." ^
   --distpath "C:\Users\Bakar\Documents\Powershell Scripts\System Sentinal" ^
   --hidden-import=os ^
   --hidden-import=sys ^
