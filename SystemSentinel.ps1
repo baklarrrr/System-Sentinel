@@ -1,4 +1,11 @@
+
 # SystemSentinel.ps1
+
+param(
+    [switch]$WaitOnExit
+)
+
+Start-Sleep -Seconds 5
 
 # Detect PyInstaller bundle environment
 if ($env:_MEIPASS) {
@@ -78,5 +85,7 @@ Log-SystemSpecs
 # Monitor current GPU load
 Monitor-GPUUsage
 
-# Wait for user input before exiting
-Read-Host "Press Enter to exit the System Sentinel script"
+# Wait for user input before exiting if requested
+if ($WaitOnExit) {
+    Read-Host "Press Enter to exit the System Sentinel script"
+}
