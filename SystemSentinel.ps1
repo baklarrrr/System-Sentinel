@@ -17,28 +17,18 @@ else {
     $global:RootPath = $PSScriptRoot
 }
 
-  # Get the correct path regardless of PyInstaller context
-  $scriptPath = $PSScriptRoot
-  if (-not $scriptPath) {
-      $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
-  }
-
-  # Use Join-Path for reliable path construction
-  $modulePath = Join-Path -Path $scriptPath -ChildPath "SystemSentinelModule.psm1"
-
-  # Add verbose logging for troubleshooting
-  Write-Host "Loading from: $modulePath"
-
-  # Import module with error handling
-  if (Test-Path $modulePath) {
-      Import-Module $modulePath -Force -Verbose
-  } else {
-      throw "Module not found at: $modulePath"
-  }
 # Ensure $PSScriptRoot is defined (for older PowerShell versions)
 if (-not $PSScriptRoot) {
-    # Fallback for PS < 3.0
     $PSScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Definition
+}
+
+# Import the System Sentinel module once
+$modulePath = Join-Path $PSScriptRoot 'SystemSentinelModule.psm1'
+Write-Host "Loading from: $modulePath"
+if (Test-Path $modulePath) {
+    Import-Module -Name $modulePath -Force -Verbose
+} else {
+    throw "Module file not found: $modulePath"
 }
 
 # Load configuration from JSON file
@@ -54,19 +44,6 @@ else {
 $global:LogFile           = Join-Path $PSScriptRoot $config.LogFileName
 $global:MaxLogFileSizeMB  = $config.MaxLogFileSizeMB
 $global:MaxArchivedLogs   = $config.MaxArchivedLogs
-    # Determine the folder where this script is located.
-    $currentDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-
-    # Form the full path of the module file.
-    $moduleFile = Join-Path $currentDir 'SystemSentinelModule.psm1'
-
-    # Check if the module file exists.
-    if (-not (Test-Path $moduleFile)) {
-        throw "Module file not found: $moduleFile"
-    }
-
-    # Import the module.
-    Import-Module -Name $moduleFile -Force -Verbose
 # Call functions that are defined in SystemSentinelModule.psm1
 Set-FileAssociation
 
