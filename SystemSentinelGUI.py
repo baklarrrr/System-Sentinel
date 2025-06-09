@@ -1,12 +1,25 @@
 import os
 import sys
 import logging
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit, QProgressBar, QPushButton, QMessageBox, QApplication
+from PyQt6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QLabel,
+    QTextEdit,
+    QProgressBar,
+    QPushButton,
+    QMessageBox,
+    QApplication,
+    QDialog,
+)
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import QProcess
 import subprocess
 
 from log_helper import logger  # centralized logging
+from report_generator import parse_log_dates
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
 
 def resource_path(relative_path):
     try:
@@ -17,6 +30,40 @@ def resource_path(relative_path):
     if not os.path.exists(full_path):
         logger.error(f"Resource not found: {full_path}")
     return full_path
+
+
+class ReportWindow(QDialog):
+    def __init__(self, log_path: str, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("System Sentinel Report")
+        self.resize(800, 600)
+        layout = QVBoxLayout(self)
+
+        self.logView = QTextEdit()
+        self.logView.setReadOnly(True)
+        layout.addWidget(self.logView)
+
+        if os.path.exists(log_path):
+            with open(log_path, "r", encoding="utf-8", errors="ignore") as f:
+                self.logView.setPlainText(f.read())
+        else:
+            self.logView.setPlainText(f"Log file not found: {log_path}")
+
+        data = parse_log_dates(log_path)
+        if data:
+            times = sorted(data.keys())
+            counts = [data[t] for t in times]
+            fig = Figure(figsize=(6, 4))
+            ax = fig.add_subplot(111)
+            ax.plot(times, counts, marker='o')
+            ax.set_title("Log Activity Over Time")
+            ax.set_xlabel("Time")
+            ax.set_ylabel("Entries")
+            fig.autofmt_xdate()
+            canvas = FigureCanvas(fig)
+            layout.addWidget(canvas)
+        else:
+            layout.addWidget(QLabel("No data available for plotting."))
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -107,10 +154,8 @@ class MainWindow(QWidget):
     def show_report(self):
         log_path = resource_path("build_scan_log.txt")
         if os.path.exists(log_path):
-            if sys.platform == "win32":
-                os.startfile(log_path)
-            else:
-                subprocess.Popen(["xdg-open", log_path])
+            dialog = ReportWindow(log_path, self)
+            dialog.exec()
         else:
             QMessageBox.information(self, "Report Not Found", f"No generated log found at:\n{log_path}")
 
