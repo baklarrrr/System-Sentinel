@@ -95,5 +95,8 @@ else {
 Append-PerformanceHistory
 Log-SystemSpecs
 
+# Monitor current GPU load
+Monitor-GPUUsage
+
 # Wait for user input before exiting
 Read-Host "Press Enter to exit the System Sentinel script"

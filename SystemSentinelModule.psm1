@@ -373,6 +373,40 @@ function Send-SlackNotification {
     }
 }
 
+# Utility to calculate folder size in GB
+function Get-FolderSizeGB {
+    param([string]$Path)
+    $size = 0
+    if (Test-Path $Path) {
+        $size = (Get-ChildItem -Path $Path -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum
+    }
+    return [math]::Round(($size / 1GB), 2)
+}
+
+# Check Unreal and Blender caches for excessive size
+function Check-EditorCaches {
+    Write-Log "Checking editor caches..." -Level Debug
+    $limit = if ($config.CacheSizeLimitGB) { [double]$config.CacheSizeLimitGB } else { 5 }
+    $dirs = @(
+        Join-Path $env:LOCALAPPDATA 'UnrealEngine',
+        Join-Path $env:APPDATA 'Blender Foundation\Blender'
+    )
+    $over = @()
+    foreach ($d in $dirs) {
+        if (Test-Path $d) {
+            $size = Get-FolderSizeGB -Path $d
+            Write-Log "Cache $d size: ${size}GB" -Level Info
+            if ($size -gt $limit) { $over += "$d is ${size}GB" }
+        }
+    }
+    if ($over.Count -gt 0) {
+        $msg = "Cache size over ${limit}GB: " + ($over -join '; ')
+        Write-Log $msg -Level Warning
+        return $msg
+    }
+    return "Caches within limit"
+}
+
 # --- Section G: Restart Recommendation & Performance History Logging ---
 function Get-RestartRecommendation {
     Write-Log "Evaluating if a restart is recommended..." -Level Info
@@ -405,6 +439,10 @@ function Get-RestartRecommendation {
     catch {
         Write-Log "Error calculating memory usage: $($_.Exception.Message)" -Level Error
     }
+
+    $cacheCheck = Check-EditorCaches
+    if ($cacheCheck -notmatch 'within limit') { $reasons += $cacheCheck }
+
     if ($reasons.Count -gt 0) {
         $recommendation = "Restart Recommended: " + ($reasons -join " ; ")
     }
@@ -560,24 +598,51 @@ function Set-HighPerformancePowerPlan {
 function Monitor-GPUUsage {
     Write-Log "Monitoring GPU usage..." -Level Debug
     try {
+        $threshold = if ($config.GPULoadThresholdPercent) { [int]$config.GPULoadThresholdPercent } else { 90 }
+        $highUsage = $false
+
         if (Get-Command nvidia-smi -ErrorAction SilentlyContinue) {
-            $gpuInfo = nvidia-smi
-            Write-Log "NVIDIA GPU Usage:`n$gpuInfo" -Level Info
+            $usageValues = nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>$null
+            if ($usageValues) {
+                foreach ($val in $usageValues) {
+                    $valNum = [int]$val
+                    Write-Log "NVIDIA GPU Utilization: $valNum%" -Level Info
+                    if ($valNum -gt $threshold) { $highUsage = $true }
+                }
+            }
+            else {
+                $gpuInfo = nvidia-smi
+                Write-Log "NVIDIA GPU Usage:`n$gpuInfo" -Level Info
+            }
         }
         elseif (Get-Command rocm-smi -ErrorAction SilentlyContinue) {
-            $gpuInfo = rocm-smi
-            Write-Log "AMD GPU Usage:`n$gpuInfo" -Level Info
+            $output = rocm-smi --showuse 2>$null
+            $usageMatch = $output | Select-String -Pattern '(?<num>\d+)%'
+            if ($usageMatch) {
+                $valNum = [int]$usageMatch.Matches[0].Groups['num'].Value
+                Write-Log "AMD GPU Utilization: $valNum%" -Level Info
+                if ($valNum -gt $threshold) { $highUsage = $true }
+            }
+            else {
+                Write-Log "AMD GPU Usage:`n$output" -Level Info
+            }
         }
         else {
             $intelGPU = Get-WmiObject -Namespace root\CIMV2 -Class Win32_PerfFormattedData_GPU_VideoController -ErrorAction SilentlyContinue
             if ($intelGPU) {
                 foreach ($gpu in $intelGPU) {
-                    Write-Log "Intel GPU: $($gpu.Name) - Utilization: $($gpu.UtilizationPercentage)%" -Level Info
+                    $valNum = [int]$gpu.UtilizationPercentage
+                    Write-Log "Intel GPU: $($gpu.Name) - Utilization: $valNum%" -Level Info
+                    if ($valNum -gt $threshold) { $highUsage = $true }
                 }
             }
             else {
                 Write-Log "No GPU monitoring tools found. Supported: NVIDIA, AMD, Intel." -Level Warning
             }
+        }
+
+        if ($highUsage) {
+            Write-Log "GPU usage exceeds $threshold%" -Level Warning
         }
     }
     catch {
@@ -737,4 +802,5 @@ Export-ModuleMember -Function Invoke-WithRetry, Get-Timestamp, Roll-LogFile, Wri
     Analyze-PerformanceTrends, Self-Update, Run-RemoteMaintenance, Send-Notification, Send-SlackNotification, `
     Get-RestartRecommendation, Append-PerformanceHistory, Log-SystemSpecs, Optimize-SystemPerformance, `
     Monitor-SystemResources, Set-HighPerformancePowerPlan, Monitor-GPUUsage, Launch-TelemetryDashboard, `
-    Detect-Anomalies, Optimize-Workload, Check-DriverFirmwareUpdates, Optimize-Thermals, Analyze-Logs, Set-FileAssociation
+    Detect-Anomalies, Optimize-Workload, Check-DriverFirmwareUpdates, Optimize-Thermals, Analyze-Logs, Set-FileAssociation, `
+    Get-FolderSizeGB, Check-EditorCaches

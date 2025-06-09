@@ -51,7 +51,9 @@ Customize via SystemSentinelConfig.json:
 {
   "LogFileName": "build_scan_log.txt",
   "MaxLogFileSizeMB": 10,
-  "MaxArchivedLogs": 5
+  "MaxArchivedLogs": 5,
+  "GPULoadThresholdPercent": 90,
+  "CacheSizeLimitGB": 5
 }
 
 ## 📈 Performance Impact
